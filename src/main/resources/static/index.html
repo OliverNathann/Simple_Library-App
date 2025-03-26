@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2 { border-bottom: 2px solid black; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        input, button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+<h2>Library Management System</h2>
+
+<!-- Login Form -->
+<h3>Login</h3>
+<input type="text" id="loginUser" placeholder="Username">
+<input type="password" id="loginPass" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<!-- Register Form -->
+<h3>Register</h3>
+<input type="text" id="registerUser" placeholder="Username">
+<input type="password" id="registerPass" placeholder="Password">
+<button onclick="register()">Register</button>
+
+<!-- Add Book -->
+<h3>Add New Book</h3>
+<input type="text" id="bookTitle" placeholder="Book Title">
+<input type="text" id="bookAuthor" placeholder="Author">
+<button onclick="addBook()">Add Book</button>
+
+<!-- List of Books -->
+<h3>Book List</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="bookList"></tbody>
+</table>
+
+<!-- Borrow a Book -->
+<h3>Borrow a Book</h3>
+<input type="number" id="borrowBookId" placeholder="Book ID">
+<input type="date" id="borrowReturnDate">
+<button onclick="borrowBook()">Borrow</button>
+
+<!-- Return a Book -->
+<h3>Return a Book</h3>
+<input type="number" id="returnLoanId" placeholder="Loan ID">
+<input type="date" id="returnDate">
+<button onclick="returnBook()">Return</button>
+
+<!-- Overdue Books -->
+<h3>Overdue Books</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Loan ID</th>
+        <th>Book Title</th>
+        <th>Borrower</th>
+        <th>Return Date</th>
+    </tr>
+    </thead>
+    <tbody id="overdueList"></tbody>
+</table>
+
+<script>
+    let token = ""; // Simpan token setelah login
+
+    async function login() {
+        const username = document.getElementById("loginUser").value;
+        const password = document.getElementById("loginPass").value;
+
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        if (data.token) {
+            token = data.token;
+            alert("Login
